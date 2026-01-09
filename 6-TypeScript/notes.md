@@ -392,3 +392,54 @@ const Cfg:Config={
 }
 Cfg.name="MaiKirtanHoon" //---> Error: Cannot assign to 'name' because it is a read-only property.
 ```
+
+##Objects in TypeScript:
+Objects in TypeScript: Objects in TypeScript can be defined using types or interfaces, allowing for structured data representation with type safety.
+Example using Type:
+```typescript
+let Tea: {
+    name:string;
+    cost:number;
+    isHot:boolean;
+    indegredient:string[]
+}
+Tea ={
+    name:"Adrak CHai",
+    cost:50,
+    isHot:true,
+    indegredient:["mai","kya","khud","pr"]
+}
+
+type club ={
+    name:string;
+    rank:number;
+    UclQualified:boolean;
+    Captains:string[]
+}
+const RealMadrid:club={
+    name:"Real Madrid",
+    rank:1,
+    UclQualified:true,
+    Captains:["Dani","Fede","Vini","Courtois"]
+}
+```
+
+```typescript
+type Club ={
+    name:string
+}
+let fcb:Club ={name:"FC Barca"}
+let rm ={name:"Real Madrid",champs:true}
+fcb=rm;
+```
+In above example, TypeScript allows assignment of `rm` to `fcb` because `rm` has at least the properties defined in the `Club` type. This is an example of structural typing, where compatibility is based on the shape of the objects rather than their explicit types.
+
+one more example:
+```typescript
+type Player ={
+    name:string
+}
+const messi={name:"Messi",alsoCalled:"Robberito"}
+const ronaldo:Player= messi;
+```
+In this example, the `messi` object has an additional property `alsoCalled` that is not defined in the `Player` type. However, TypeScript allows the assignment of `messi` to `ronaldo` because `messi` has at least the properties defined in the `Player` type. This demonstrates TypeScript's structural typing, where compatibility is determined by the presence of required properties rather than exact type matches.

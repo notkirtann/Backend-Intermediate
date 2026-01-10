@@ -443,3 +443,367 @@ const messi={name:"Messi",alsoCalled:"Robberito"}
 const ronaldo:Player= messi;
 ```
 In this example, the `messi` object has an additional property `alsoCalled` that is not defined in the `Player` type. However, TypeScript allows the assignment of `messi` to `ronaldo` because `messi` has at least the properties defined in the `Player` type. This demonstrates TypeScript's structural typing, where compatibility is determined by the presence of required properties rather than exact type matches.
+
+## OBJECT IN TypeScript
+How to define object type in TypeScript:
+```typescript
+let Tea: {
+    name:string;
+    cost:number;
+    isHot:boolean;
+    indegredient:string[]
+}
+Tea ={
+    name:"Adrak CHai",
+    cost:50,
+    isHot:true,
+    indegredient:["mai","kya","khud","pr"]
+}
+
+type club ={
+    name:string;
+    rank:number;
+    UclQualified:boolean;
+    Captains:string[]
+}
+const RealMadrid:club={
+    name:"Real Madrid",
+    rank:1,
+    UclQualified:true,
+    Captains:["Dani","Fede","Vini","Courtois"]
+}
+```
+In this example, we define the structure of the `Tea` object directly and use a `club` type to define the structure of the `RealMadrid` object. This ensures that both objects adhere to the specified types, providing type safety and clarity in the code.
+### Structural Typing in TypeScript:
+Structural Typing: TypeScript uses structural typing, meaning that compatibility between types is determined by their structure (i.e., the properties they have) rather than their explicit declarations.
+Example:
+```typescript
+type Club ={
+    name:string
+}
+let fcb:Club ={name:"FC Barca"}
+let rm ={name:"Real Madrid",champs:true}
+fcb=rm;
+```
+In above example, TypeScript allows assignment of `rm` to `fcb` because `rm` has at least the properties defined in the `Club` type. This is an example of structural typing, where compatibility is based on the shape of the objects rather than their explicit types.
+
+Good Practice:
+```typescript
+type Item={name:string,quantity:number}
+type Address={street:string,pincode:number}
+
+type Order = {
+    id:string
+    item:Item[]
+    address:Address
+}
+```
+In this example, we define separate types for `Item` and `Address`, and then use them to create a more complex `Order` type. This modular approach enhances code readability and maintainability by clearly defining the structure of each component.
+
+## Utility Types in TypeScript:
+```typescript
+// eg-1
+type League ={
+    name:string
+    nation:string
+    teams:number
+}
+const updateLeague = (updates:Partial<League>)=>{
+        console.log("updating chai with",updates);
+}
+updateLeague({name:"La Liga"})
+updateLeague({nation:"Spain"})
+updateLeague({})
+
+// eg-2
+type Manchester ={
+    name?:string
+    found?:number
+}
+const Utd = (club:Required<Manchester>)=>{
+    console.log(club);
+    
+} 
+Utd({name:"Manchester",found:1905}) //---> with required even optional data becomes mandatory.
+
+// eg-3
+type Player ={
+    name:string
+    price:number
+    available:boolean
+}
+
+type BasicBuyOption = Pick<Player,"name"|"price">
+
+const PlayerInfo:BasicBuyOption ={
+    name:"Valverde",
+    price:220
+}
+// eg-4
+// ! in this you use--->
+ type PublicPlayer = Omit<Player,"price"> 
+// will omit price from new publicPlayer you will create
+```
+In this example, we demonstrate the use of utility types `Partial`, `Required`, `Pick`, and `Omit` to manipulate types in TypeScript. These utilities help create more flexible and reusable type definitions, enhancing code maintainability and readability.
+
+## Functions in TypeScript:
+Functions in TypeScript: Functions in TypeScript can have typed parameters and return types, providing type safety and clarity in function definitions.
+Example:
+```typescript
+function buyPlayer(club:string,value:number):string{
+    return `The Market value of ${club} is ${value}`
+}
+function buyClub(available:string):string|null{
+    if(!available) return null
+    else return available
+}
+
+function match(day?:number){
+    return day
+}
+function matchDay(date:string="Unavailable"){
+    return date
+}
+
+function printing(toPrint:string): void {
+    console.log(toPrint);
+    
+}
+```
+In this example, the `buyPlayer` function takes a `string` and a `number` as parameters and returns a `string`. The `buyClub` function returns either a `string` or `null`. The `match` function has an optional parameter, while the `matchDay` function has a default parameter value. The `printing` function has a return type of `void`, indicating it does not return any value. This demonstrates how TypeScript enhances function definitions with type annotations for better type safety and code clarity.
+
+## Array, Enum and Tuple in TypeScript:
+### Arrays
+Arrays in TypeScript: Arrays in TypeScript can be defined with specific element types, ensuring type safety for array operations.
+Example:
+```typescript
+const players:string[] = ["Cristiano","Sergio"]
+const jersey:number[] = [1,2,3,4,5,6,7]
+
+const rating:Array<number> = [1.4,5.2]
+
+type PlayerDetail ={
+    name:string,
+    jerseyNo:number
+}
+const playerD:PlayerDetail[]=[
+    {name:"fede",jerseyNo:8},
+    {name:"goat",jerseyNo:7}
+]
+    //! readonly array
+const clubs:readonly string[] =['RMCF','FCB','AC Milan']
+// clubs.push('Varca') //@ readonly dont allow push
+
+const city:number[][] =[
+    [1,2,3],
+    [4,5,6]
+]
+```
+In this example, we define arrays with specific element types, such as `string[]` for player names and `number[]` for jersey numbers. We also demonstrate the use of a generic array type `Array<number>` and an array of objects `PlayerDetail[]`. Additionally, we show how to create a readonly array using the `readonly` modifier, which prevents modifications to the array.
+
+### Enums
+Enums in TypeScript: Enums in TypeScript are a way to define a set of named constants, making code more readable and maintainable.
+Examples:
+```typescript
+enum bestClub{
+    RealMadrid,
+    BayernMunich,
+    AC_Milan
+}
+const clubSelect = bestClub.RealMadrid
+
+enum Status{ //code Not good practise
+    POLICE = 100,
+    AMBULANCE, //@automatic got 101
+    OTHER //@automatic got 102
+}
+
+enum MadridCaptain{
+    FEDE="Fede Valverde",
+    DANI="Dani Carjaval",
+    VINIJR="Vinicis Jr."
+}
+
+function clubCaptain(who:MadridCaptain){
+    console.log(`Current Match Captain is ${who}`);
+}
+clubCaptain(MadridCaptain.VINIJR)
+
+//! Hetrogenous Values in ENUM
+
+enum playerData { //@ not a good practise to create a hetrogenous value enums
+    jerseyNo=1,
+    name="Courtois"
+}
+
+//@ with tuple  dont use push it gives unexpected behaviour and difficult to debug
+```
+
+### Tuples
+Tuples in TypeScript: Tuples in TypeScript are a way to define an array with a fixed number of elements, where each element can have a different type.
+Examples:
+```typescript
+let playerTuple:[string,number] =["a",1]
+// playerTuple=[20,"a"] //@ wont work because seq matter
+
+    //!readonly tuple
+const locationTuple:readonly[number,number] =[28.744,75.17824]
+
+    //!named tuple
+const clubTuple:[name:string,found:number] =["Read-Madrid",1902 ]
+```
+
+In this example, we define a tuple `playerTuple` with a `string` and a `number`, demonstrating that the order of types matters. We also show a readonly tuple `locationTuple`, which prevents modifications to its elements. Additionally, we illustrate a named tuple `clubTuple`, where each element is given a descriptive name for better readability.
+
+## OOPS in TypeScript:
+Object-Oriented Programming (OOP) in TypeScript: TypeScript supports OOP principles such as classes, inheritance, encapsulation, and polymorphism, allowing for structured and reusable code.
+### Classes
+Classes in TypeScript: Classes in TypeScript are blueprints for creating objects, encapsulating data and behavior.
+Example:
+```typescript
+class Club {
+    name:string;
+    found:number;
+
+    constructor(name:string,found:number){
+        this.name = name;
+        this.found = found;
+    }
+}
+const RealMadrid = new Club("Real Madrid",1902)
+
+RealMadrid.found = 1902;
+RealMadrid.name = "Los Blancos"
+```
+In this example, we define a `Club` class with properties `name` and `found`, along with a constructor to initialize these properties. We then create an instance of the `Club` class for "Real Madrid" and set its properties.
+
+### Excess Modifiers
+Access Modifiers in TypeScript: Access modifiers in TypeScript control the visibility of class members (properties and methods) to enforce encapsulation.
+Example:
+```typescript
+class Player{  
+    private name:string; //@excessable only within class
+    private num:number;
+    private salary="10M";
+
+    public constructor(name:string,num:number){
+        this.name = name;
+        this.num = num;
+    }
+    reveal(){
+        return `Salary of Jersey Num. ${this.num} aka ${this.name} is ${this.salary}`
+    }
+
+    protected Agent = "Jorge Mendes" //@excess by extended class and class
+    #agentContract = "2-years" //@ another way of declarinng private
+
+    agentContract(){
+        return `Agent's ${this.#agentContract} of contract is left`
+    }
+}
+
+class PlayerPersonal extends Player{
+    getAgent(){
+        return`Agent name is${this.Agent}` //@ only excess by class and the extended class only.
+    }
+    
+}
+
+const sal = new Player("Fede",8)
+```
+Explanation of all access modifiers used:
+- `public`: Members are accessible from anywhere. By default, all class members are public if no access modifier is specified.
+- `private`: Members are accessible only within the class they are defined in. They cannot be accessed from outside the class or by derived classes.
+- `protected`: Members are accessible within the class they are defined in and by derived classes.
+- `#` (private field): This is a newer syntax for declaring private fields in TypeScript (and JavaScript). Fields declared with `#` are truly private and cannot be accessed outside the class, even by derived classes.
+
+In this example, we define a `Player` class with private properties `name`, `num`, and `salary`, which are only accessible within the class. The `reveal` method is public and can be called from outside the class. The `Agent` property is protected, allowing access from derived classes like `PlayerPersonal`. The `#agentContract` is a private field that cannot be accessed outside the class, even by derived classes. This demonstrates how access modifiers enforce encapsulation in TypeScript classes.
+
+#### read only properties in class
+```typescript
+class Stadium{
+    private readonly capacity:number ; //@can be assigned once than can only be read 
+
+    constructor(capacity:number){
+        this.capacity = capacity
+        console.log(`Stadium total capacity is ${capacity}`);    
+    }
+}
+
+class Coach{
+    private _coachSalary = 10
+    
+    get coachSalary(){
+        return this._coachSalary
+    }
+
+    set coachSalary(value:number){
+        if(value<5){
+            throw new Error("Deal Cancel")
+        }else{
+            this._coachSalary=value
+        }
+    }
+}
+const deal = new Coach()
+deal.coachSalary=10;
+```
+In this example, the `Stadium` class has a `capacity` property that is marked as `readonly`, meaning it can only be assigned a value once during initialization and cannot be modified afterward. The `Coach` class demonstrates the use of getter and setter methods for the `_coachSalary` property. The getter method allows reading the salary, while the setter method includes validation logic to ensure that the salary cannot be set below a certain threshold. This encapsulation helps maintain the integrity of the class's data.
+
+### Static Members
+Static Members in TypeScript: Static members in TypeScript are properties or methods that belong to the class itself rather than to instances of the class.
+Example:
+```typescript
+class PSG{
+    static name = "Paris Saint Germain"
+    constructor(public found:number){
+
+    }
+}
+console.log(PSG.name); //@accessed by dot on class name directly
+```
+In this example, the `PSG` class has a static property `name` that holds the name of the club. Since it is declared as static, it can be accessed directly on the class itself using `PSG.name`, without needing to create an instance of the class. This is useful for properties or methods that are shared across all instances of the class or that do not pertain to any specific instance.
+
+### Abstract Class
+Abstract Classes in TypeScript: Abstract classes in TypeScript are classes that cannot be instantiated directly and are meant to be extended by other classes. They can contain abstract methods that must be implemented by derived classes.
+Example:
+```typescript
+abstract class Drink{
+    abstract make():void 
+}
+
+class Chai extends Drink{
+    make(){
+        console.log('level dekh kr baat kiya kr laala');
+        
+    }
+}
+```
+In this example, the `Drink` class is declared as abstract and contains an abstract method `make()`. The `Chai` class extends the `Drink` class and provides an implementation for the `make()` method. Since `Drink` is abstract, it cannot be instantiated directly; instead, it serves as a blueprint for other classes that extend it. This allows for a common interface while enforcing that derived classes implement specific functionality.
+
+### Composition Cocept
+Composition in TypeScript: Composition is a design principle where classes are built by combining simpler, reusable components rather than relying solely on inheritance. This promotes flexibility and code reuse.
+Example:
+```typescript
+class Engine{
+    start(){
+        console.log("Engine started");
+        
+    }
+}
+class Car{
+    private engine:Engine;
+
+    constructor(engine:Engine){
+        this.engine = engine;
+    }
+
+    drive(){
+        this.engine.start();
+        console.log("Car is driving");
+    }
+}
+```
+In this example, the `Engine` class represents a simple component with a `start()` method. The `Car` class composes an instance of the `Engine` class, allowing it to use the engine's functionality through the `drive()` method. This approach promotes code reuse and flexibility, as different types of engines can be used with the `Car` class without needing to create a complex inheritance hierarchy.
+
+## Interfaces and Generics in TypeScript:

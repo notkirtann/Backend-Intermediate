@@ -37,7 +37,7 @@ class MasalaChai implements TeaRecipe{
 type Response = {res: true} | {res: false}
 //# class ResponseAPI implements Response{}
 
-// creates problem due to change in type only supports obj and some other because A class can only implement an object type or intersection of object types with statically known members.
+// creates problem due to change in type because A class can only implement an object type or intersection of object types with statically known members.
 
 //? to tackle this : interface was introduced.
 
